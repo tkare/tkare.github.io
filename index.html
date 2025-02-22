@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name - Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Playfair+Display:wght@700&family=Syncopate:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+</head>
+<body>
+    <div class="animated-bg">
+        <div class="gradient-circle circle-1"></div>
+        <div class="gradient-circle circle-2"></div>
+        <div class="gradient-circle circle-3"></div>
+    </div>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo"><a href="index.html">Portfolio</a></div>
+            <ul class="nav-links">
+                <li><a href="index.html#about">About</a></li>
+                <li class="dropdown">
+                    <a href="index.html#work">Work</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="professional-work.html">Professional Work</a></li>
+                        <li><a href="experimental-work.html">Experimental Work</a></li>
+                        <li><a href="favorite-work.html">My Personal Favorites</a></li>
+                    </ul>
+                </li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="hero">
+            <div class="easing-grid">
+                <div class="easing-bar" data-easing="easeInQuad"></div>
+                <div class="easing-bar" data-easing="easeInCubic"></div>
+                <div class="easing-bar" data-easing="easeInQuart"></div>
+                <div class="easing-bar" data-easing="easeInQuint"></div>
+                <div class="easing-bar" data-easing="easeInSine"></div>
+                <div class="easing-bar" data-easing="easeInExpo"></div>
+                <div class="easing-bar" data-easing="easeInCirc"></div>
+                <div class="easing-bar" data-easing="easeInBack"></div>
+            </div>
+            <h1>
+                <span class="text-main">Design</span>
+                <span class="text-main">Portfolio</span>
+            </h1>
+            <div class="el"></div>
+        </section>
+
+        <section id="about" class="about">
+            <h2 class="section-title">About</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Company History</h3>
+                    <!-- Add your content here -->
+                </div>
+                <div class="gradient-images">
+                    <!-- Gradient images will be added here -->
+                </div>
+            </div>
+        </section>
+
+        <section id="work" class="work">
+            <h2 class="section-title">Work</h2>
+            <div class="portfolio-grid">
+                <a href="favorite-work.html" class="portfolio-item">
+                    <div class="portfolio-image"></div>
+                    <div class="portfolio-info">
+                        <h3>My Personal Favorites</h3>
+                        <p>Creative Expression</p>
+                    </div>
+                </a>
+                <a href="professional-work.html" class="portfolio-item">
+                    <div class="portfolio-image"></div>
+                    <div class="portfolio-info">
+                        <h3>Professional Work</h3>
+                        <p>Client Projects</p>
+                    </div>
+                </a>
+                <a href="experimental-work.html" class="portfolio-item">
+                    <div class="portfolio-image"></div>
+                    <div class="portfolio-info">
+                        <h3>Experimental</h3>
+                        <p>Design Exploration</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Trina Arellano. All rights reserved.</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html> 
