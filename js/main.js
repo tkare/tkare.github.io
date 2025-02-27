@@ -12,11 +12,11 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Script loaded');
     
-    // Initialize carousel if it exists
-    const carousel = document.querySelector('.versatility-carousel');
-    if (carousel) {
+    // Initialize all carousels on the page
+    const carousels = document.querySelectorAll('.versatility-carousel');
+    carousels.forEach(carousel => {
         initializeCarousel(carousel);
-    }
+    });
     
     // Check if anime.js is loaded
     if (typeof anime === 'undefined') {
@@ -107,64 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Lightbox functionality
-    let currentImageIndex = 0;
-    let galleryImages = [];
-    const lightbox = document.getElementById('lightbox');
-
-    if (lightbox) {  // Only initialize if lightbox exists
-        document.querySelectorAll('.gallery-item img, .style-item img').forEach(img => {
-            img.addEventListener('click', function() {
-                const lightboxImg = document.getElementById('lightbox-img');
-                // Get all images in the same container (gallery or carousel)
-                const container = this.closest('.gallery-grid') || this.closest('.style-grid');
-                galleryImages = Array.from(container.querySelectorAll('img'));
-                currentImageIndex = galleryImages.indexOf(this);
-                
-                lightboxImg.src = this.src;
-                lightbox.classList.add('active');
-            });
-        });
-
-        // Add navigation arrows to lightbox
-        const prevArrow = document.createElement('span');
-        const nextArrow = document.createElement('span');
-        prevArrow.className = 'lightbox-arrow lightbox-prev';
-        nextArrow.className = 'lightbox-arrow lightbox-next';
-        prevArrow.innerHTML = '&#10094;';  // Left arrow
-        nextArrow.innerHTML = '&#10095;';  // Right arrow
-        lightbox.appendChild(prevArrow);
-        lightbox.appendChild(nextArrow);
-
-        // Navigation functions
-        prevArrow.addEventListener('click', () => {
-            currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
-            document.getElementById('lightbox-img').src = galleryImages[currentImageIndex].src;
-        });
-
-        nextArrow.addEventListener('click', () => {
-            currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
-            document.getElementById('lightbox-img').src = galleryImages[currentImageIndex].src;
-        });
-
-        // Close lightbox
-        document.querySelector('.lightbox-close').addEventListener('click', () => {
-            lightbox.classList.remove('active');
-        });
-
-        // Also close on background click
-        lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox) {
-                lightbox.classList.remove('active');
-            }
-        });
-
-        // Close lightbox with Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
-                lightbox.classList.remove('active');
-            }
-        });
-    }
+    initLightbox();
 
     // Handle page transitions
     const circles = document.querySelectorAll('.gradient-circle');
@@ -257,6 +200,9 @@ function initializeCarousel(carousel) {
         currentIndex = ((index % totalSlides) + totalSlides) % totalSlides;
         slides[currentIndex].classList.add('active');
         updateIndicators();
+        
+        // Reinitialize lightbox after slide change
+        initLightbox();
     }
 
     // Event listeners
@@ -284,4 +230,106 @@ function initializeCarousel(carousel) {
             goToSlide(currentIndex + 1);
         }
     });
+}
+
+// Add this function to handle lightbox functionality
+function initLightbox() {
+    console.log('Initializing lightbox...');
+
+    // Create lightbox elements if they don't exist
+    if (!document.querySelector('.lightbox')) {
+        console.log('Creating lightbox elements...');
+        const lightbox = document.createElement('div');
+        lightbox.className = 'lightbox';
+        lightbox.innerHTML = `
+            <span class="lightbox-close">&times;</span>
+            <img class="lightbox-content" src="" alt="">
+            <span class="lightbox-prev">&#10094;</span>
+            <span class="lightbox-next">&#10095;</span>
+        `;
+        document.body.appendChild(lightbox);
+    }
+
+    const lightbox = document.querySelector('.lightbox');
+    const lightboxImg = lightbox.querySelector('.lightbox-content');
+    const closeBtn = lightbox.querySelector('.lightbox-close');
+    const prevBtn = lightbox.querySelector('.lightbox-prev');
+    const nextBtn = lightbox.querySelector('.lightbox-next');
+
+    // Log all clickable images found
+    const allImages = document.querySelectorAll('.gallery-item img, .style-item img');
+    console.log('Found clickable images:', allImages.length);
+
+    // Add click event to all images
+    allImages.forEach(img => {
+        console.log('Adding click listener to image:', img.src);
+        img.addEventListener('click', function() {
+            console.log('Image clicked:', this.src);
+            
+            // Get all images in the same container (gallery or carousel slide)
+            const container = this.closest('.gallery-grid') || 
+                            this.closest('.style-grid') || 
+                            this.closest('.carousel-slide');
+            console.log('Container found:', container);
+            
+            const images = Array.from(container.querySelectorAll('img'));
+            console.log('Images in container:', images.length);
+            let currentIndex = images.indexOf(this);
+
+            // Show lightbox with clicked image
+            lightboxImg.src = this.src;
+            lightbox.classList.add('active');
+            console.log('Lightbox activated');
+
+            // Previous image
+            prevBtn.onclick = () => {
+                currentIndex = (currentIndex - 1 + images.length) % images.length;
+                lightboxImg.src = images[currentIndex].src;
+            };
+
+            // Next image
+            nextBtn.onclick = () => {
+                currentIndex = (currentIndex + 1) % images.length;
+                lightboxImg.src = images[currentIndex].src;
+            };
+
+            // Update navigation buttons visibility
+            prevBtn.style.display = images.length > 1 ? 'block' : 'none';
+            nextBtn.style.display = images.length > 1 ? 'block' : 'none';
+        });
+    });
+
+    // Close lightbox
+    closeBtn.addEventListener('click', () => {
+        lightbox.classList.remove('active');
+    });
+
+    // Close on background click
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            lightbox.classList.remove('active');
+        }
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('active')) return;
+        
+        if (e.key === 'Escape') lightbox.classList.remove('active');
+        if (e.key === 'ArrowLeft') prevBtn.click();
+        if (e.key === 'ArrowRight') nextBtn.click();
+    });
+}
+
+// Make sure initLightbox is called after DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded, initializing lightbox...');
+    initLightbox();
+});
+
+// Also reinitialize after any dynamic content changes
+function updateCarousel(index) {
+    // ... existing carousel update code ...
+    console.log('Carousel updated, reinitializing lightbox...');
+    initLightbox();
 } 

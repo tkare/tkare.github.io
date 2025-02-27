@@ -18,8 +18,8 @@
 
 body {
     font-family: var(--font-body);
-    background-color: rgba(26, 26, 26, 0.95);
-    color: var(--color-text);
+    background-color: black;
+    color: white;
     line-height: 1.6;
     position: relative;
 }
@@ -121,12 +121,12 @@ body {
     height: 100vh;
     display: flex;
     align-items: center;
-    justify-content: center;
-    text-align: center;
+    justify-content: flex-start;
+    text-align: left;
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 var(--spacing-medium);
+    padding: 0 var(--spacing-large);
     position: relative;
 }
 
@@ -140,15 +140,17 @@ body {
     display: flex;
     flex-direction: column;
     gap: 2rem;  /* Add spacing between words */
-    align-items: center;
+    align-items: flex-start;
     position: relative;
     z-index: 1;
+    text-align: left;
 }
 
 .text-main {
     font-size: 1.2em;
     letter-spacing: 0.15em;
     opacity: 1;  /* Make visible by default */
+    text-align: left;
 }
 
 .text-white {
@@ -500,19 +502,38 @@ body {
 }
 
 .sub-section-title {
-    font-family: var(--font-subheading);
+    font-family: var(--font-heading);  /* Using Syncopate font */
     color: var(--color-accent);
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
+    font-size: 3.5rem;  /* Much larger size */
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.15em;  /* Increased letter spacing */
+    margin-bottom: 1rem;
+    font-weight: 700;  /* Bold weight */
+    opacity: 0.9;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s ease forwards;
 }
 
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 0.9;
+        transform: translateY(0);
+    }
+}
+
+/* Style for the description text below titles */
 .section-description {
-    color: var(--color-text);
-    opacity: 0.8;
-    margin-bottom: var(--spacing-medium);
-    font-size: 1.1rem;
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 3rem;
+    font-weight: 300;  /* Lighter weight for contrast */
+    letter-spacing: 0.05em;
 }
 
 /* Specific grid layouts for different content types */
@@ -821,11 +842,11 @@ body {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.9);
-    padding: 4rem;  /* Increased padding to make room for arrows */
+    padding: 4rem;
 }
 
 .lightbox.active {
-    display: flex;
+    display: flex !important;  /* Force display when active */
     justify-content: center;
     align-items: center;
 }
@@ -836,34 +857,28 @@ body {
     object-fit: contain;
 }
 
-.lightbox-close {
-    position: absolute;
-    top: 1rem;
-    right: 2rem;
+.lightbox-close,
+.lightbox-prev,
+.lightbox-next {
     color: white;
     font-size: 2rem;
     cursor: pointer;
+    position: absolute;
     z-index: 1000;
 }
 
-/* Lightbox Navigation Arrows */
-.lightbox-arrow {
-    position: absolute;
+.lightbox-close {
+    top: 1rem;
+    right: 2rem;
+}
+
+.lightbox-prev,
+.lightbox-next {
     top: 50%;
     transform: translateY(-50%);
-    color: white;
-    font-size: 3rem;
-    cursor: pointer;
     padding: 1rem;
     background: rgba(0, 0, 0, 0.3);
     border-radius: 50%;
-    transition: all 0.3s ease;
-    z-index: 1000;
-}
-
-.lightbox-arrow:hover {
-    background: rgba(0, 0, 0, 0.5);
-    transform: translateY(-50%) scale(1.1);
 }
 
 .lightbox-prev {
@@ -978,7 +993,7 @@ body {
 /* Specific styling for Kappas Café slide */
 .carousel-slide:first-child .style-grid {
     grid-template-columns: repeat(3, 1fr);
-    max-width: 900px;
+    max-width: 900px;  /* Match other slides */
     margin: 2rem auto 0;
 }
 
@@ -1031,8 +1046,9 @@ body {
 
 .style-item img {
     width: 100%;
-    aspect-ratio: 4/5;
-    object-fit: cover;
+    height: auto;
+    object-fit: contain;
+    max-height: 300px;  /* Adjust this value as needed */
     border-radius: 8px;
     margin-bottom: 1rem;
     transition: transform 0.3s ease;
@@ -1288,4 +1304,101 @@ body {
 .hero h1 {
     position: relative;
     z-index: 1;
+}
+
+/* Keep main page titles centered */
+.category-header .hero {
+    justify-content: center;
+    text-align: center;
+}
+
+.category-header .hero h1 {
+    align-items: center;
+    text-align: center;
+}
+
+.category-header .text-main {
+    text-align: center;
+}
+
+/* Keep section titles (like "VERSATILITY") left-aligned */
+.category-section .sub-section-title {
+    text-align: left;
+}
+
+/* Add styles for the divider */
+.section-divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-accent), transparent);
+    margin: 4rem 0;
+    opacity: 0.5;
+}
+
+/* Style adjustments for board announcements carousel */
+.sub-category .versatility-carousel {
+    margin: 2rem 0;
+    background: rgba(147, 112, 219, 0.075);
+    border-radius: 8px;
+    border: 1px solid rgba(147, 112, 219, 0.1);
+    height: 800px;  /* Fixed height for all slides */
+}
+
+.sub-category .carousel-slide {
+    padding: 2rem;
+    height: 100%;  /* Take full height of container */
+    position: absolute;  /* Keep absolute positioning */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Style grid layout */
+.sub-category .style-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);  /* Default two columns */
+    gap: 2rem;
+    margin-top: 2rem;
+    height: calc(100% - 100px);  /* Leave space for title/description */
+    align-items: center;
+}
+
+/* Special case for single image */
+.sub-category .style-grid:has(> :only-child) {
+    grid-template-columns: 1fr;  /* Single column */
+    justify-items: center;
+}
+
+.sub-category .style-item img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    max-height: 600px;  /* Control maximum image height */
+    border-radius: 4px;
+}
+
+/* Ensure consistent spacing */
+.project-title {
+    margin-bottom: 0.5rem;
+}
+
+.project-description {
+    margin-bottom: 2rem;
+}
+
+/* Special handling for MGC Board slide */
+.carousel-slide:has(img[src*="mgc_board"]) .style-grid {
+    max-width: 700px;  /* Limit overall width */
+    margin: 0 auto;
+}
+
+.carousel-slide:has(img[src*="mgc_board"]) .style-item img {
+    max-height: 500px;  /* Reduce maximum height */
+    width: auto;  /* Let width adjust automatically */
+    margin: 0 auto;  /* Center the image */
+    display: block;
+}
+
+/* Ensure the container has proper padding */
+.carousel-slide:has(img[src*="mgc_board"]) {
+    padding: 2rem 4rem;  /* Add more horizontal padding */
 } 
