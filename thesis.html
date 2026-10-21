@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAHSP Thesis — Trina Arellano</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page-thesis">
+    <div class="animated-bg">
+        <div class="gradient-circle circle-1"></div>
+        <div class="gradient-circle circle-2"></div>
+        <div class="gradient-circle circle-3"></div>
+        <div class="gradient-circle circle-4"></div>
+        <div class="gradient-circle circle-5"></div>
+    </div>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo"><a href="index.html">TKARE</a></div>
+            <ul class="nav-links">
+                <li><a href="about.html">About</a></li>
+                <li class="dropdown active">
+                    <a href="thesis.html">Work</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="thesis.html" class="active">Thesis</a></li>
+                        <li><a href="graphic-design-work.html">Graphic Design Work</a></li>
+                        <!-- Hidden until section is complete
+                        <li><a href="favorite-work.html">My Personal Favorites</a></li>
+                        -->
+                    </ul>
+                </li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="category-header">
+            <div class="hero">
+                <h1>
+                    <span class="text-main">GAHSP</span>
+                </h1>
+            </div>
+            <p class="thesis-tagline thesis-tagline--subtitle">Generating an Algorithm for Hot Spots Policing</p>
+            <p class="thesis-tagline thesis-tagline--detail">Cleansing data and bias within predictive policing algorithms.</p>
+        </section>
+
+        <div class="thesis-body thesis-page">
+            <dl class="thesis-meta">
+                <div>
+                    <dt>Program</dt>
+                    <dd>Gemstone Honors Program, University of Maryland (2025)</dd>
+                </div>
+                <div>
+                    <dt>Mentor</dt>
+                    <dd>Dr. Mohammad Taghi Hajiaghayi</dd>
+                </div>
+                <div>
+                    <dt>Submitted</dt>
+                    <dd>May 2, 2025</dd>
+                </div>
+            </dl>
+
+            <nav class="thesis-toc" aria-label="Thesis sections">
+                <a href="#overview">Overview</a>
+                <a href="#questions">Questions</a>
+                <a href="#context">Context</a>
+                <a href="#process">Process</a>
+                <a href="#outcomes">Outcomes</a>
+            </nav>
+
+            <article>
+                <section id="overview" class="thesis-section">
+                    <h2>Overview</h2>
+                    <p>Predictive policing tools send officers to forecast “hot spots” using machine learning. Those models learn from historical crime and arrest data—records that already reflect uneven enforcement and racial bias—so predictions can perpetuate the same disparities.</p>
+                    <p>Our Gemstone team, <strong>GAHSP</strong> (Generating an Algorithm for Hot Spots Policing), built a new hot-spot forecasting pipeline that explicitly optimizes for <strong>demographic fairness</strong> alongside predictive accuracy. Using real open crime data, we evaluated our model against <strong>PredPol</strong>, a widely used predictive policing system. The thesis reports that our approach achieved <strong>better fairness and equal or better accuracy</strong> than PredPol in our benchmarks—supporting the claim that more equitable policing forecasts do not have to sacrifice predictive performance.</p>
+                </section>
+
+                <section id="questions" class="thesis-section">
+                    <h2>Research questions</h2>
+                    <ul class="thesis-list">
+                        <li>What are the psychosocial impacts of predictive policing and of racial bias in enforcement?</li>
+                        <li>How can machine learning be applied to hot-spot forecasting, and what constraints matter for policing contexts?</li>
+                        <li>How can raw crime data be collected so it is consistent and complete enough for modeling?</li>
+                        <li>Beyond biased data, what biases appear in police practice—and how can an algorithm mitigate them?</li>
+                        <li>How do fairness and predictive accuracy trade off, and where should that balance be set?</li>
+                    </ul>
+                </section>
+
+                <section id="context" class="thesis-section">
+                    <h2>Context &amp; related work</h2>
+                    <p>The thesis connects criminology (hot spots policing, broken-windows lineage, documented racial disparities in stops and arrests) with CS/ML (supervised forecasting, fairness metrics, feedback loops in PredPol-style models). A central theme is <strong>feedback</strong>: deploying officers from biased predictions yields more arrests in the same places, which reinforces the next generation of predictions.</p>
+                    <ul class="thesis-list thesis-list--compact">
+                        <li><strong>Benchmark.</strong> PredPol uses an epidemic-style Hawkes process on grid cells; we replicate comparison via Lum &amp; Isaac’s PredPol implementation.</li>
+                        <li><strong>Fairness.</strong> We build on Mohler et al.’s penalized likelihood framing (accuracy vs. fairness) and measure demographic disparity in how policing attention falls across racial groups in predicted hot spots.</li>
+                    </ul>
+                </section>
+
+                <section id="process" class="thesis-section">
+                    <h2>Process &amp; methods</h2>
+                    <p>We assembled historical incident data from public portals in <strong>Montgomery County, MD</strong>; <strong>Chicago, IL</strong>; and <strong>San Francisco, CA</strong>, overlaid a population-density-aligned grid, and labeled cells with Census demographic estimates (White, Black, Hispanic, Asian).</p>
+                    <ol class="thesis-list thesis-list--numbered">
+                        <li><strong>Forecasting core.</strong> <a href="https://auto.gluon.ai/" target="_blank" rel="noopener noreferrer">AutoGluon</a> time-series models forecast future crime intensity per cell; the top 100 cells each day define hot spots.</li>
+                        <li><strong>Metrics.</strong> <em>Predictive Accuracy Index</em> (PAI) measures concentration of crime inside designated hot spots; our <em>fairness metric</em> summarizes disparity in how racial groups experience hot-spot coverage.</li>
+                        <li><strong>Combined objective.</strong> Custom loss <code>L<sub>λ</sub> = λF − PAI</code> trades fairness (<em>F</em>) against accuracy (PAI), with λ tuned in experiments.</li>
+                        <li><strong>Evaluation.</strong> Weekly prediction horizons (<em>T</em> = 7 days), forecasts from Feb 22, 2022 onward, paired one-tailed <em>t</em>-tests vs. PredPol.</li>
+                    </ol>
+                </section>
+
+                <section id="outcomes" class="thesis-section">
+                    <h2>Outcomes &amp; contributions</h2>
+                    <p>Across all three cities, our model achieved a <strong>significantly lower (better) average fairness metric</strong> than PredPol. On <strong>PAI</strong>, we saw <strong>significantly higher accuracy than PredPol</strong> in Montgomery County and Chicago, and <strong>comparable</strong> performance in San Francisco. So in this retrospective study, optimizing for fairness did not come at the cost of aggregate accuracy relative to PredPol—though our model showed higher week-to-week volatility than PredPol, and fairness-weighting λ creates internal tradeoffs between PAI and fairness.</p>
+                    <p>The work also argues against the notion that “fewer inputs” automatically means less bias: incorporating demographic accountability into the objective reduced disparity while staying competitive on crime concentration in hot spots.</p>
+                </section>
+            </article>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 Trina Arellano. All rights reserved.</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

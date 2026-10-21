@@ -1,3 +1,32 @@
+/**
+ * Types the homepage hero subtitle after the main title animation finishes.
+ */
+function startHeroTypingAnimation() {
+    const textEl = document.getElementById('hero-typed-text');
+    const cursorEl = document.querySelector('.hero-typed-cursor');
+    if (!textEl || !cursorEl) return;
+
+    const full = 'Welcome to my website!';
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        textEl.textContent = full;
+        return;
+    }
+
+    let i = 0;
+
+    function tick() {
+        if (i < full.length) {
+            textEl.textContent = full.slice(0, i + 1);
+            i += 1;
+            const delay = i === 1 ? 200 : 38 + Math.floor(Math.random() * 22);
+            window.setTimeout(tick, delay);
+        }
+    }
+
+    tick();
+}
+
 // Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -25,15 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     console.log('Anime.js is loaded');
-    
-    // Test box animation
-    anime({
-        targets: '.el',
-        translateX: 250,
-        rotate: '1turn',
-        duration: 800,
-        backgroundColor: '#FFF'
-    });
 
     // Easing demonstration
     const bars = document.querySelectorAll('.easing-bar');
@@ -41,9 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Update bars on scroll
     window.addEventListener('scroll', () => {
-        const scrollPercent = window.scrollY / maxScroll;
-        const translateX = scrollPercent * 300 - 150; // Move from -150px to +150px
-        
+        if (!bars.length) return;
+        const scrollPercent = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+
         bars.forEach((bar, index) => {
             const easing = anime.easing[bar.dataset.easing];
             const easedProgress = easing(scrollPercent);
@@ -62,6 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.querySelector('.hero h1')) {
         anime.timeline({
             easing: 'easeOutExpo',
+            complete: function () {
+                startHeroTypingAnimation();
+            }
         })
         .add({
             targets: '.hero h1 .text-main:first-child',
@@ -119,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
             circle2: { bottom: '-60vh', right: '-60vh', background: 'radial-gradient(circle, #FF69B4, transparent 70%)' },
             circle3: { top: '50%', left: '50%', background: 'radial-gradient(circle, #87CEEB, transparent 70%)' }
         },
-        professional: {
+        'graphic-design-work': {
             circle1: { top: '-30vh', left: '20vw', background: 'radial-gradient(circle, #FF6B6B, transparent 70%)' },
             circle2: { bottom: '-30vh', right: '10vw', background: 'radial-gradient(circle, #4ECDC4, transparent 70%)' },
             circle3: { top: '60%', left: '30%', background: 'radial-gradient(circle, #45B7D1, transparent 70%)' }
@@ -129,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
             circle2: { bottom: '-40vh', right: '30vw', background: 'radial-gradient(circle, #FF6B6B, transparent 70%)' },
             circle3: { top: '40%', left: '60%', background: 'radial-gradient(circle, #6C5B7B, transparent 70%)' }
         },
-        experimental: {
+        thesis: {
             circle1: { top: '-40vh', left: '30vw', background: 'radial-gradient(circle, #A8E6CF, transparent 70%)' },
             circle2: { bottom: '-20vh', right: '-10vw', background: 'radial-gradient(circle, #FFD3B6, transparent 70%)' },
             circle3: { top: '30%', left: '40%', background: 'radial-gradient(circle, #FF8B94, transparent 70%)' }
@@ -166,6 +189,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentPage = window.location.pathname.split('/').pop().split('.')[0] || 'home';
     updateGradients(currentPage);
 });
+
+/** Set once so repeated initLightbox() does not stack duplicate key handlers */
+let lightboxGlobalKeydownBound = false;
 
 // Carousel initialization function
 function initializeCarousel(carousel) {
@@ -222,8 +248,9 @@ function initializeCarousel(carousel) {
         }
     }, false);
 
-    // Keyboard navigation
+    // Keyboard navigation (ignore when lightbox is open — it uses the same keys)
     document.addEventListener('keydown', e => {
+        if (document.querySelector('.lightbox')?.classList.contains('active')) return;
         if (e.key === 'ArrowLeft') {
             goToSlide(currentIndex - 1);
         } else if (e.key === 'ArrowRight') {
@@ -278,19 +305,23 @@ function initLightbox() {
 
             // Show lightbox with clicked image
             lightboxImg.src = this.src;
+            lightboxImg.alt = this.alt || '';
             lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
             console.log('Lightbox activated');
 
             // Previous image
             prevBtn.onclick = () => {
                 currentIndex = (currentIndex - 1 + images.length) % images.length;
                 lightboxImg.src = images[currentIndex].src;
+                lightboxImg.alt = images[currentIndex].alt || '';
             };
 
             // Next image
             nextBtn.onclick = () => {
                 currentIndex = (currentIndex + 1) % images.length;
                 lightboxImg.src = images[currentIndex].src;
+                lightboxImg.alt = images[currentIndex].alt || '';
             };
 
             // Update navigation buttons visibility
@@ -299,26 +330,48 @@ function initLightbox() {
         });
     });
 
-    // Close lightbox
-    closeBtn.addEventListener('click', () => {
+    function closeLightbox() {
         lightbox.classList.remove('active');
-    });
+        document.body.style.overflow = '';
+    }
+
+    // Close lightbox
+    closeBtn.addEventListener('click', closeLightbox);
 
     // Close on background click
     lightbox.addEventListener('click', (e) => {
         if (e.target === lightbox) {
-            lightbox.classList.remove('active');
+            closeLightbox();
         }
     });
 
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-        if (!lightbox.classList.contains('active')) return;
-        
-        if (e.key === 'Escape') lightbox.classList.remove('active');
-        if (e.key === 'ArrowLeft') prevBtn.click();
-        if (e.key === 'ArrowRight') nextBtn.click();
-    });
+    // Keyboard: one capture-phase listener for all opens (don’t register per initLightbox call)
+    if (!lightboxGlobalKeydownBound) {
+        lightboxGlobalKeydownBound = true;
+        document.addEventListener(
+            'keydown',
+            (e) => {
+                const lb = document.querySelector('.lightbox');
+                if (!lb?.classList.contains('active')) return;
+                const prev = lb.querySelector('.lightbox-prev');
+                const next = lb.querySelector('.lightbox-next');
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    lb.classList.remove('active');
+                    document.body.style.overflow = '';
+                    return;
+                }
+                if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (e.key === 'ArrowLeft') prev?.click();
+                    else next?.click();
+                }
+            },
+            true
+        );
+    }
 }
 
 // Make sure initLightbox is called after DOM is loaded
@@ -332,4 +385,67 @@ function updateCarousel(index) {
     // ... existing carousel update code ...
     console.log('Carousel updated, reinitializing lightbox...');
     initLightbox();
-} 
+}
+
+// Add section navigation highlighting
+function updateSectionNav() {
+    const sections = document.querySelectorAll('section, .sub-category');
+    const navLinks = document.querySelectorAll('.section-nav a');
+    
+    let currentSection = '';
+    
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        const sectionHeight = section.clientHeight;
+        const scroll = window.scrollY;
+        
+        if (scroll >= sectionTop && scroll < sectionTop + sectionHeight) {
+            currentSection = '#' + section.id;
+        }
+    });
+    
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === currentSection) {
+            link.classList.add('active');
+        }
+    });
+}
+
+// Add scroll event listener
+window.addEventListener('scroll', updateSectionNav);
+document.addEventListener('DOMContentLoaded', updateSectionNav);
+
+// Update the smooth scrolling function to account for header height
+document.querySelectorAll('.section-nav a').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        const headerHeight = document.querySelector('.header').offsetHeight;
+        const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - headerHeight - 20; // Added extra 20px padding
+        
+        window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+        });
+    });
+});
+
+// Control section nav visibility
+function updateSectionNavVisibility() {
+    const nav = document.querySelector('.section-nav');
+    const header = document.querySelector('.category-header');
+    const headerBottom = header.getBoundingClientRect().bottom;
+    
+    // Show nav only after header is scrolled past
+    if (headerBottom <= 0) {
+        nav.classList.add('visible');
+    } else {
+        nav.classList.remove('visible');
+    }
+}
+
+// Add scroll event listener for nav visibility
+window.addEventListener('scroll', updateSectionNavVisibility);
+document.addEventListener('DOMContentLoaded', updateSectionNavVisibility); 

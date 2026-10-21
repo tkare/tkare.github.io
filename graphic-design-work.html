@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Work - Trina Arellano</title>
+    <title>Graphic Design Work - Trina Arellano</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="page-professional">
+<body class="page-graphic-design">
     <div class="animated-bg">
         <div class="gradient-circle circle-1"></div>
         <div class="gradient-circle circle-2"></div>
@@ -19,30 +19,46 @@
     </div>
     <header class="header">
         <nav class="nav">
-            <div class="logo"><a href="index.html">Portfolio</a></div>
+            <div class="logo"><a href="index.html">TKARE</a></div>
             <ul class="nav-links">
-                <li><a href="index.html#about">About</a></li>
+                <li><a href="about.html">About</a></li>
                 <li class="dropdown active">
-                    <a href="index.html#work">Work</a>
+                    <a href="thesis.html">Work</a>
                     <ul class="dropdown-menu">
-                        <li><a href="professional-work.html" class="active">Professional Work</a></li>
-                        <li><a href="experimental-work.html">Experimental Work</a></li>
+                        <li><a href="thesis.html">Thesis</a></li>
+                        <li><a href="graphic-design-work.html" class="active">Graphic Design Work</a></li>
+                        <!-- Hidden until section is complete
                         <li><a href="favorite-work.html">My Personal Favorites</a></li>
+                        -->
                     </ul>
                 </li>
-                <li><a href="index.html#contact">Contact</a></li>
+                <li><a href="contact.html">Contact</a></li>
             </ul>
         </nav>
     </header>
     
     <main>
+        <!-- Add table of contents navigation -->
+        <nav class="section-nav">
+            <ul>
+                <li><a href="#versatility" class="active">Versatile Design</a></li>
+                <li><a href="#social-media">Social Media</a>
+                    <ul class="sub-nav">
+                        <li><a href="#board-announcements">Board Announcements</a></li>
+                        <li><a href="#dedicated">Dedicated</a></li>
+                        <li><a href="#founders-day">Founders Day</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
         <section class="category-header">
             <div class="hero">
                 <h1>
-                    <span class="text-main">Professional Work</span>
+                    <span class="text-main">Graphic Design</span>
                 </h1>
             </div>
-            <h2><b>A collection of my professional design work and versatility</b></h2>
+            <h2>Graphic design projects including versatility exercises and social media campaigns.</h2>
         </section>
         
         <!-- Add this divider -->
@@ -50,9 +66,9 @@
         
         <section class="gallery">
             <!-- Versatility Section -->
-            <div class="category-section">
-                <h2 class="sub-section-title">Versatility</h2>
-                <p class="section-description">Exploring different design approaches for the same project</p>
+            <div id="versatility" class="category-section">
+                <h2 class="sub-section-title">Versatile Design</h2>
+                <p class="section-description">Exploring different visual approaches for the same project</p>
                 <div class="versatility-carousel">
                     <div class="carousel-navigation">
                         <button class="carousel-arrow prev" aria-label="Previous project">&larr;</button>
@@ -79,7 +95,7 @@
                             
                             <!-- SOP Styles -->
                             <div class="carousel-slide">
-                                <h3 class="project-title">Spirit of the Phoenix</h3>
+                                <h3 class="project-title">Annual Dedicated Event:Spirit of the Phoenix</h3>
                                 <p class="project-description">Narratives event campaign</p>
                                 <div class="style-grid">
                                     <div class="style-item">
@@ -118,12 +134,12 @@
             <!-- Add divider between major sections -->
             <div class="section-divider"></div>
             
-            <div class="category-section">
-                <h2 class="sub-section-title">Social Media</h2>
+            <div id="social-media" class="category-section">
+                <h2 class="sub-section-title">Social Media</h2> 
                 <p class="section-description">Campaign designs and style variations</p>
 
                  <!-- MGC Board -->
-                 <div class="sub-category">
+                 <div id="board-announcements" class="sub-category">
                     <h3 class="sub-category-title">Board Announcements</h3>
                     <p class="campaign-description">Executive Board announcements for various organizations</p>
                     <div class="versatility-carousel">
@@ -180,7 +196,7 @@
                 </div>
                 
                 <!-- Dedicated Event -->
-                <div class="sub-category">
+                <div id="dedicated" class="sub-category">
                     <h3 class="sub-category-title">Dedicated</h3>
                     <p class="campaign-description">14th Annual benefit and cultural show - "Empower Her: Education of Marginalized Young Women"</p>
                     <div class="gallery-grid social-grid">
@@ -216,9 +232,9 @@
                 </div>
                 
                 <!-- Founders Day -->
-                <div class="sub-category">
+                <div id="founders-day" class="sub-category">
                     <h3 class="sub-category-title">Founders Day</h3>
-                    <p class="campaign-description">Celebrating our organization's founding and legacy</p>
+                    <p class="campaign-description">Celebrating my sorority's founding and legacy</p>
                     <div class="gallery-grid social-grid">
                         <div class="gallery-item">
                             <img src="imgs/professional/founders_day/1.png" alt="Founders Day Main">
@@ -242,7 +258,7 @@
     </main>
     
     <footer class="footer">
-        <p>&copy; 2025 Trina Arellano. All rights reserved.</p>
+        <p>&copy; 2026 Trina Arellano. All rights reserved.</p>
     </footer>
     
     <script src="js/main.js"></script>
